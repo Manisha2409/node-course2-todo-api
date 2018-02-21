@@ -7,6 +7,7 @@ var {Users} = require('./models/Users.js');
 
 const {ObjectID} = require('mongodb');
 
+const port = process.env.PORT || 3000;
 var app=express();
 
 app.use(bodyParser.json());
@@ -47,8 +48,8 @@ app.get('/todos/:id',(req,res)=>{
    });
 });
 
-app.listen(3000,()=>{
-    console.log('Started listening on 3000 port');
+app.listen(port,()=>{
+    console.log(`Started lisening port ${port}`);
 });
 
 
