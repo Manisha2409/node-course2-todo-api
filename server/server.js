@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const {mongoose} = require('./db/mongoose.js');
 const {Todo} = require('./models/todo.js');
 const {Users} = require('./models/Users.js');
-
+const {authenticate} = require('./middleware/authenticate');
 const {ObjectID} = require('mongodb');
 
 const port = process.env.PORT;
@@ -108,6 +108,12 @@ app.post('/users', (req, res) => {
       res.status(400).send(e);
     })
   });
+
+  
+
+app.get('/users/me', authenticate,(req,res)=>{
+    res.send(req.user);
+})
 
 
 app.listen(port,()=>{
