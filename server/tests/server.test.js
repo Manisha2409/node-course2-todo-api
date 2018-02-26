@@ -227,7 +227,7 @@ describe('DELETE /todos/:id',(todo)=>{
                 expect(user).toBeTruthy();
                 expect(user.password).not.toBe(password);
                 done();
-              });
+              }).catch((e)=>done(e));
 
             });
     });
@@ -251,5 +251,60 @@ describe('DELETE /todos/:id',(todo)=>{
             .send({email,password})
             .expect(400)
             .end(done);
+    });
+  });
+
+
+  describe('POST /users/login',()=>{
+    it('should create a user', (done) => {
+    var email = 'example@example.com';
+    var password = '123mnb!';
+
+    request(app)
+      .post('/users')
+      .send({email, password})
+      .expect(200)
+      .expect((res) => {
+        expect(res.headers['x-auth']).toBeTruthy();
+        expect(res.body._id).toBeTruthy();
+        expect(res.body.email).toBe(email);
+      })
+      .end((err) => {
+        if (err) {
+          return done(err);
+        }
+
+        Users.findOne({email}).then((user) => {
+          expect(user).toBeTruthy();
+          expect(user.password).not.toBe(password);
+          done();
+        }).catch((e)=>done(e));
+      });
+    });
+
+    it('should reject with invalid login',(done)=>{
+
+  
+      request(app)
+        .post('/users')
+        .send({
+          email: users[1].email,
+           password: users[1].password + '1'
+          })
+        .expect(400)
+        .expect((res) => {
+          expect(res.headers['x-auth']).toBeFalsy();
+         
+        })
+        .end((err,res) => {
+          if (err) {
+            return done(err);
+          }
+  
+          Users.findById(users[1]._id).then((user) => {
+            expect(user.tokens.length).toBe(0);
+            done();
+          }).catch((e)=>done(e));
+        });
     });
   });
