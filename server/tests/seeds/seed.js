@@ -24,12 +24,15 @@ password: 'passmanisha'
 
 const todos = [{
     _id: new ObjectID(),
-    text : 'First test todos'
+    text : 'First test todos',
+    _creator : userOneId
   },{
     _id: new ObjectID(),
     text : 'Second test todos',
     completed: true,
-    completedAt: 253455
+    completedAt: 253455,
+    _creator: userTwoId
+    
   }];
 
   const populateTodos = (done)=>{
