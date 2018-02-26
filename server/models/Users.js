@@ -47,6 +47,16 @@ UserSchema.methods.toJSON = function(){
 
 
 
+UserSchema.methods.removeToken = function (token){
+    var user = this;
+  return  user.update({
+        $pull:{
+        tokens:{token} 
+        }
+    }); 
+};
+
+
 UserSchema.methods.generateAuthToken =  function (){
     var user = this;
     var access =  'auth';
